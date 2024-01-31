@@ -1,0 +1,146 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+@using KountaApp.Areas.Identity.Data;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManger
+@inject UserManager<ApplicationUser> UserManager
+
+
+<main style=" background: linear-gradient(5deg, #37517E,#FFFFFF )">
+
+    <div class="container">
+
+        <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+
+                        <div class="d-flex justify-content-center py-1">
+                            <a class="logo d-flex align-items-center w-auto" asp-page="/Index">
+                                <img src="~/assets/img/logo1.png" alt="">
+                                <span class="d-none d-lg-block">KOUNTA</span>
+                            </a>
+                        </div><!-- End Logo -->
+
+           
+                    
+                        <div class="card mb-3">
+
+                            <div class="card-body">
+
+
+
+                           
+                             
+                                <form class="row g-3" id="account" method="post">
+
+
+                                    <div class="pt-4 pb-2">
+                                        <h5 class="card-title text-center pb-0 fs-4">Login</h5>
+                                        <p class="text-center small">Enter your username & password</p>
+                                    </div>
+
+
+
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <input type="email" asp-for="Input.Email" class="form-control" aria-required="true" />
+                                            <label asp-for="Input.Email" class="form-label"></label>
+                                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <input asp-for="Input.Password" class="form-control" aria-required="true" />
+                                            <label asp-for="Input.Password" class="form-label"></label>
+                                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="form-check">
+                                            <label asp-for="Input.RememberMe" class="form-label">
+                                                <input class="form-check-input" asp-for="Input.RememberMe" />
+                                                @Html.DisplayNameFor(m => m.Input.RememberMe)
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+                                    </div>
+
+                                </form>
+
+                                <div>
+                                    <div>  <p style="font-size:large" class="card-title">- Or Sign in with -</p></div>
+                          
+
+                                    @{
+                                        if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                                        {
+                                            <div>
+                                                <p>
+                                                    There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
+                                                        article
+                                                        about setting up this ASP.NET application to support logging in via external services
+                                                    </a>.
+                                                </p>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                                                <div class="text-center">
+                                                    <p>
+                                                        @foreach (var provider in Model.ExternalLogins!)
+                                                        {
+                                                            <button type="submit" class="w-100 btn btn-lg btn btn-light" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName+</button>
+
+                                                        }
+                                                    </p>
+                                                </div>
+
+                                                <div>
+                                                    <p>
+                                                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                                                    </p>
+                                                    <p>
+                                                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                                                    </p>
+                                                    <p>
+                                                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
+                                                    </p>
+                                                </div>
+                                            </form>
+                                        }
+                                    }
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+       
+ 
+           </div> 
+
+   
+</main><!-- End #main -->
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+   
+
+}
